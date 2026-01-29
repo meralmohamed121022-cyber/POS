@@ -1141,7 +1141,10 @@
     border-radius: 8px;
     border-left: 4px solid #667eea;
 }
-
+/* لون زر أرباحي (بنفسجي مميز) */
+.bg-arbahi { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+/* لون التاج اللي بيظهر جوه العرض */
+.offer-type-arbahi { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
    </style>
 </head>
 <body>
@@ -1220,16 +1223,16 @@
             <div class="pending-item">Customer Name</div>
         </div>
 
-        <div class="offers-container" id="offersContainer">
-            <div class="offer-tabs">
-                <div class="tab-btn bg-offline tab-active" id="offlineTab" onclick="showOffers('offline')">🏪 Offline</div>
-                <div class="tab-btn bg-online" id="onlineTab" onclick="showOffers('online')">📱 Online</div>
-            </div>
-            <div class="offers-display" id="offersDisplay">
-                <div class="no-offer">Select item to view offers...</div>
-            </div>
-        </div>
+      <div class="offers-container" id="offersContainer">
+    <div class="offer-tabs">
+        <div class="tab-btn bg-offline tab-active" id="offlineTab" onclick="showOffers('offline')">🏪 Offline</div>
+        <div class="tab-btn bg-online" id="onlineTab" onclick="showOffers('online')">📱 Online</div>
+        <div class="tab-btn bg-arbahi" id="arbahiTab" onclick="showOffers('arbahi')">💎 Arbahi</div>
     </div>
+    <div class="offers-display" id="offersDisplay">
+        <div class="no-offer">Select item to view offers...</div>
+    </div>
+</div>    </div>
 </div>
 
 <div class="fullscreen-container" id="omsContainer">
