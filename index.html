@@ -1287,6 +1287,67 @@
   </div>
 </div>
 
+</body> <!-- نهاية الـbody -->
+
+<!-- CGP Modal -->
+<div id="cgpModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeCGPModal()">&times;</span>
+        <h2>📊 Clinical Guidance & Product Information (CGP)</h2>
+        
+        <div class="cgp-search-section" id="cgpSearchSection" style="display: none;">
+            <h3>🔍 Search Product</h3>
+            <input type="text" id="cgpSearchInput" placeholder="Enter product code or name" 
+                   oninput="showCGPSearchSuggestions()" onkeydown="handleCGPSearchKey(event)">
+            <button onclick="searchCGPProduct()">Search</button>
+            <div class="cgp-search-suggestions" id="cgpSearchSuggestions"></div>
+        </div>
+
+        <div id="cgpProductContent" style="display: none;">
+            <div class="cgp-product-info">
+                <div class="cgp-product-name" id="cgpProductName"></div>
+            </div>
+
+            <div class="cgp-sections">
+                <div class="cgp-section sales-points-cgp">
+                    <h4>💼 Sales Points</h4>
+                    <ul id="cgpSalesPoints"></ul>
+                </div>
+
+                <div class="cgp-section supplements-cgp">
+                    <h4>💊 Supplements Related</h4>
+                    <div id="cgpSupplements"></div>
+                </div>
+
+                <div class="cgp-section disease-cgp">
+                    <h4>🏥 Disease Related</h4>
+                    <ul id="cgpDiseaseRelated"></ul>
+                </div>
+
+                <div class="cgp-section interactions-cgp">
+                    <h4>⚠️ Drug Interactions</h4>
+                    <ul id="cgpDrugInteractions"></ul>
+                </div>
+
+                <div class="cgp-section administration-cgp">
+                    <h4>📋 Administration</h4>
+                    <ul id="cgpAdministration"></ul>
+                </div>
+
+                <div class="cgp-section pregnancy-cgp">
+                    <h4>⚠️ Pregnancy Assessment</h4>
+                    <div id="cgpPregnancyContent"></div>
+                </div>
+
+                <div class="cgp-section breastfeeding-cgp">
+                    <h4>🤱 Breastfeeding Safety</h4>
+                    <div id="cgpBreastfeedingContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <img src="https://raw.githubusercontent.com/meralmohamed121022-cyber/Drug-Monograph/refs/heads/main/6_20251129_184528_0005.png" alt="Ph Mohamed Kholeif"
 style="position: fixed; bottom: 10px; right: 10px; width: 100px; height: 100px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.4); background: white; padding: 2px; animation: float 4s ease-in-out infinite; z-index: 1000; cursor: pointer;"
 id="profileImage" />
@@ -1506,67 +1567,6 @@ infoBox.addEventListener('click', toggleInfoBox);
 
 <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/html2canvas@latest/dist/html2canvas.min.js"></script>
-
-</body> <!-- نهاية الـbody -->
-
-<!-- CGP Modal -->
-<div id="cgpModal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeCGPModal()">&times;</span>
-        <h2>📊 Clinical Guidance & Product Information (CGP)</h2>
-        
-        <div class="cgp-search-section" id="cgpSearchSection" style="display: none;">
-            <h3>🔍 Search Product</h3>
-            <input type="text" id="cgpSearchInput" placeholder="Enter product code or name" 
-                   oninput="showCGPSearchSuggestions()" onkeydown="handleCGPSearchKey(event)">
-            <button onclick="searchCGPProduct()">Search</button>
-            <div class="cgp-search-suggestions" id="cgpSearchSuggestions"></div>
-        </div>
-
-        <div id="cgpProductContent" style="display: none;">
-            <div class="cgp-product-info">
-                <div class="cgp-product-name" id="cgpProductName"></div>
-            </div>
-
-            <div class="cgp-sections">
-                <div class="cgp-section sales-points-cgp">
-                    <h4>💼 Sales Points</h4>
-                    <ul id="cgpSalesPoints"></ul>
-                </div>
-
-                <div class="cgp-section supplements-cgp">
-                    <h4>💊 Supplements Related</h4>
-                    <div id="cgpSupplements"></div>
-                </div>
-
-                <div class="cgp-section disease-cgp">
-                    <h4>🏥 Disease Related</h4>
-                    <ul id="cgpDiseaseRelated"></ul>
-                </div>
-
-                <div class="cgp-section interactions-cgp">
-                    <h4>⚠️ Drug Interactions</h4>
-                    <ul id="cgpDrugInteractions"></ul>
-                </div>
-
-                <div class="cgp-section administration-cgp">
-                    <h4>📋 Administration</h4>
-                    <ul id="cgpAdministration"></ul>
-                </div>
-
-                <div class="cgp-section pregnancy-cgp">
-                    <h4>⚠️ Pregnancy Assessment</h4>
-                    <div id="cgpPregnancyContent"></div>
-                </div>
-
-                <div class="cgp-section breastfeeding-cgp">
-                    <h4>🤱 Breastfeeding Safety</h4>
-                    <div id="cgpBreastfeedingContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     // Products Database
