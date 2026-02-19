@@ -1145,6 +1145,100 @@
 .bg-arbahi { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
 /* لون التاج اللي بيظهر جوه العرض */
 .offer-type-arbahi { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+/* Loyalty Modal Styles */
+.loyalty-modal {
+    display: none;
+    position: fixed;
+    z-index: 15000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.loyalty-content {
+    background-color: #f5f5f5;
+    margin: 0; /* لغينا الهوامش */
+    padding: 15px;
+    width: 100%; /* عرض الشاشة بالكامل */
+    max-width: none; /* لغينا الحد الأقصى */
+    height: 100vh; /* طول الشاشة بالكامل */
+    border: none; /* شيلنا الإطار */
+    box-shadow: none; /* مفيش داعي للظل لأنها مالية الشاشة */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-sizing: border-box; /* مهم جداً عشان الحواف متخرجش بره الشاشة بسبب الـ padding */
+}
+
+.loyalty-header-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.l-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 5px;
+    width: 105px;
+    height: 70px;
+    border: 1px solid rgba(0,0,0,0.1);
+    line-height: 1.2;
+}
+.l-btn:active { transform: translateY(2px); }
+
+/* الألوان مطابقة للصورة */
+.l-ok { background-color: #4da64d; } 
+.l-purple { background-color: #673ab7; }
+.l-blue { background-color: #1976d2; }
+.l-lightblue { background-color: #2196f3; }
+.l-red { background-color: #d32f2f; }
+.l-yellow { background-color: #fdd835; color: #000; }
+.l-darkgreen { background-color: #388e3c; }
+.l-google { background-color: #000000; color: #fff; border: 2px solid #4285f4; border-radius: 4px;} /* زرار جوجل */
+
+.loyalty-table-container {
+    background: white;
+    flex-grow: 1;
+    border: 1px solid #aaa;
+    overflow-y: auto;
+}
+
+.loyalty-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.loyalty-table th {
+    background-color: #e0e0e0;
+    color: #555;
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid #aaa;
+    border-right: 1px solid #ccc;
+    font-weight: normal;
+}
+
+.loyalty-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+    color: #333;
+}
+
+.selected-loyalty td {
+    background-color: #5c6bc0; /* اللون الأزرق الغامق بتاع التحديد في الصورة */
+    color: white;
+}
    </style>
 </head>
 <body>
@@ -1246,10 +1340,9 @@
 </div>
 
 
-<!-- Demo Modal - Simple Version -->
 <div id="demoModal" class="demo-modal">
     <div class="demo-modal-content">
-        <span class="demo-close" onclick="closeDemoModal()">&times;</span>
+        <span class="demo-close" onclick="closeDemoModal()">×</span>
         <div class="demo-modal-header">
             <h2>💡 POS Features</h2>
             <p>Available system suggestions</p>
@@ -1277,22 +1370,49 @@
         </div>
     </div>
 </div>
-<!-- Supplement Evidence Popup - ضيفه قبل </body> -->
 <div id="supplementPopup" class="modal" style="display:none;">
   <div class="modal-content supp-popup-content">
-    <span class="modal-close" onclick="closeSupplementPopup()">&times;</span>
+    <span class="modal-close" onclick="closeSupplementPopup()">×</span>
     <h3 id="supplementPopupTitle" style="margin:0 0 10px 0; color:#667eea; font-size:20px;">Supplement</h3>
     <p id="supplementPopupDose" style="font-weight:bold; margin:5px 0; color:#555; font-size:14px;"></p>
     <div id="supplementPopupEvidence" style="margin-top:15px; line-height:1.6; color:#333; white-space:pre-wrap; font-size:13px;"></div>
   </div>
 </div>
 
-</body> <!-- نهاية الـbody -->
+<div id="loyaltyModal" class="loyalty-modal">
+    <div class="loyalty-content">
+        <div class="loyalty-header-buttons">
+            <div class="l-btn l-ok" onclick="closeLoyaltyModal()">Ok</div>
+            <div class="l-btn l-purple">New family<br>member</div>
+            <div class="l-btn l-blue">Update<br>profile</div>
+            <div class="l-btn l-lightblue">SMS<br>Update<br>Profile</div>
+            <div class="l-btn l-red">برنامج شارك<br>(SMS)</div>
+            <div class="l-btn l-yellow">al-dawaa.com<br>(e-commerce)</div>
+            <div class="l-btn l-darkgreen">Donate<br>Arbahi<br>Points to<br>KANAF</div>
+            
+            <div class="l-btn l-google" onclick="sendGoogleReview()">⭐ Google<br>Review</div>
+        </div>
 
-<!-- CGP Modal -->
+        <div class="loyalty-table-container">
+            <table class="loyalty-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"></th>
+                        <th style="width: 15%;">Relation</th>
+                        <th style="width: 20%;">Loyalty ID</th>
+                        <th style="width: 40%;">LoyaltyName</th>
+                        <th style="width: 25%;">Mobile</th>
+                    </tr>
+                </thead>
+                <tbody id="loyaltyTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <div id="cgpModal" class="modal">
     <div class="modal-content">
-        <span class="modal-close" onclick="closeCGPModal()">&times;</span>
+        <span class="modal-close" onclick="closeCGPModal()">×</span>
         <h2>📊 Clinical Guidance & Product Information (CGP)</h2>
         
         <div class="cgp-search-section" id="cgpSearchSection" style="display: none;">
@@ -1360,147 +1480,38 @@ id="profileImage" />
      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
      display: none; z-index: 1001; transform-origin: bottom right; cursor: pointer;">
   
-  <!-- Name -->
   <div style="font-size:2em; font-weight:900; line-height:1; letter-spacing:0.5px; color:#b8e8ff; margin-bottom:8px; margin-top:0;">
     Mohamed<br>
     <span style="color:#ffffff; font-size:1em;">Kholeif</span>
   </div>
   
-  <!-- WhatsApp Row -->
   <div style="margin:20px 0 0 0; padding-bottom:6px; border-bottom:1px solid #4ec3f7; display:flex; justify-content:space-between; align-items:center;">
     <span style="font-weight:700; color:#57b2fc; font-size:1.1em; letter-spacing:0.02em;">WhatsApp</span>
     <div onclick="openWhatsApp(); event.stopPropagation();" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s;">
-      <!-- WhatsApp Icon -->
       <svg width="22" height="22" viewBox="0 0 16 16" fill="none" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
         <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" fill="#25D366"/>
       </svg>
     </div>
   </div>
   
-  <!-- Email Row -->
   <div style="margin:16px 0 0 0; padding-bottom:6px; border-bottom:1px solid #4ec3f7; display:flex; justify-content:space-between; align-items:center;">
     <span style="font-weight:700; color:#57b2fc; font-size:1.1em; letter-spacing:0.02em;">Email</span>
     <div onclick="openEmail(); event.stopPropagation();" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s;">
-      <!-- Email Icon -->
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
         <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#ff6b6b"/>
       </svg>
     </div>
   </div>
   
-  <!-- Facebook Row -->
   <div style="margin:16px 0 0 0; display:flex; justify-content:space-between; align-items:center;">
     <span style="font-weight:700; color:#57b2fc; font-size:1.1em; letter-spacing:0.02em;">Facebook</span>
     <div onclick="openFacebook(); event.stopPropagation();" style="cursor: pointer; display: flex; align-items: center; transition: transform 0.2s;">
-      <!-- Facebook Icon -->
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
       </svg>
     </div>
   </div>
 </div>
-
-<style>
-@keyframes fadeScaleIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes fadeScaleOut {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-}
-
-/* Media Queries للموبايل والتابليت */
-@media only screen and (max-width: 768px) {
-  /* تعديلات للتابليت */
-  #profileImage {
-    width: 80px !important;
-    height: 80px !important;
-    bottom: 8px !important;
-    right: 8px !important;
-  }
-  
-  #infoBox {
-    width: 280px !important;
-    padding: 25px 20px !important;
-    bottom: 95px !important;
-    right: 8px !important;
-  }
-  
-  #infoBox > div:first-child {
-    font-size: 1.8em !important;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  /* تعديلات للموبايل */
-  #profileImage {
-    width: 70px !important;
-    height: 70px !important;
-    bottom: 6px !important;
-    right: 6px !important;
-  }
-  
-  #infoBox {
-    width: calc(100vw - 20px) !important;
-    max-width: 250px !important;
-    padding: 20px 16px !important;
-    bottom: 82px !important;
-    right: 6px !important;
-  }
-  
-  #infoBox > div:first-child {
-    font-size: 1.6em !important;
-    margin-bottom: 6px !important;
-  }
-  
-  #infoBox > div:nth-child(2) {
-    margin: 15px 0 0 0 !important;
-    font-size: 1.05em !important;
-  }
-  
-  #infoBox > div:nth-child(3) {
-    font-size: 1.05em !important;
-    margin: 14px 0 0 0 !important;
-  }
-  
-  #infoBox > div:nth-child(4) {
-    font-size: 1.05em !important;
-    margin: 14px 0 0 0 !important;
-  }
-}
-
-@media only screen and (max-width: 320px) {
-  /* تعديلات للشاشات الصغيرة جداً */
-  #profileImage {
-    width: 60px !important;
-    height: 60px !important;
-  }
-  
-  #infoBox {
-    width: calc(100vw - 16px) !important;
-    max-width: 220px !important;
-    padding: 18px 14px !important;
-    bottom: 72px !important;
-  }
-  
-  #infoBox > div:first-child {
-    font-size: 1.4em !important;
-  }
-}
-</style>
 
 <script>
 // WhatsApp Function
@@ -2037,7 +2048,7 @@ infoBox.addEventListener('click', toggleInfoBox);
         if (currentMode === 'MAIN') {
             panel.innerHTML = `<div class="btn c-blue" onclick="setMode('SALES')">Sales</div><div class="btn c-green">STC</div><div class="btn c-blue">Employee<br>Sales</div><div class="btn c-blue">TCS</div><div class="btn c-purple">Nphies</div><div class="btn c-blue">Credit<br>Sales</div><div class="btn c-blue">AlRajhi Mokafaa</div><div class="btn c-purple">Gift Card</div><div class="btn c-red">SFDA</div><div class="btn c-blue">Mobily<br>Neqaty</div><div class="btn c-purple">Insurance</div><div class="btn c-blue">Nupco</div><div class="btn c-blue">Cash</div><div class="btn-badge-wrapper"><div class="btn c-teal" onclick="openOMS()">OMS</div><div class="btn-badge">NEW</div></div><div class="btn c-orange">Find<br>Invoice</div><div class="btn c-orange">Return</div><div class="btn c-green">Availability and<br>RSP</div><div class="btn c-blue">Lab Test</div><div class="btn c-blue">Qitaf</div><div class="btn-badge-wrapper"><div class="btn c-cgp" onclick="openCGPModal()">CGP<br>Mode</div><div class="btn-badge">NEW</div></div><div class="btn c-yellow">Wasfaty</div><div class="btn c-orange">Cura</div><div class="btn c-purple">Takaful AlArabia</div><div class="btn c-purple">Wasfaty</div><div class="btn c-orange">Open Suspended<br>Trx</div><div class="btn c-yellow">Orders</div><div class="btn c-blue" onclick="setMode('SUPERVISOR')">Supervisor</div><div class="btn c-blue">Waiting List</div><div class="btn c-red span-2">Exit</div>`;
         } else if (currentMode === 'SALES') {
-            panel.innerHTML = `<div class="btn c-purple">Deductible</div><div class="btn c-purple">Redeem<br>Coupon</div><div class="btn c-purple">Fraction</div><div class="btn c-purple">Change<br>Qty</div><div class="btn c-black">Toggle<br>Shipping</div><div class="btn c-purple">Select Price</div><div class="btn c-lightblue" onclick="deleteLine()">Delete<br>Line</div><div class="btn c-orange">Serial</div><div class="btn c-red">Offers</div><div class="btn c-blue">Pricing<br>Analysis</div><div class="btn c-teal">Load Stock</div><div class="btn c-maroon">Loyalty</div><div class="btn c-orange">Serials From<br>Invoice</div><div class="btn c-purple">Dispense</div><div class="btn c-blue">Days Supply</div><div class="btn c-blue">Select Expiry</div><div class="btn c-brown">Items<br>Interactions</div><div class="btn c-red">P2E</div><div class="btn c-brown">Exit</div><div class="btn c-blue" onclick="setMode('SUPERVISOR')">Supervisor</div><div class="btn c-brown">Items<br>Interactions</div><div class="btn c-red">P2E</div><div class="btn c-teal" onclick="suspendAndGoMain()">Suspend</div><div class="btn c-maroon">Total</div><div class="btn c-rose" onclick="goBack()">◀ Back</div>`;
+            panel.innerHTML = `<div class="btn c-purple">Deductible</div><div class="btn c-purple">Redeem<br>Coupon</div><div class="btn c-purple">Fraction</div><div class="btn c-purple">Change<br>Qty</div><div class="btn c-black">Toggle<br>Shipping</div><div class="btn c-purple">Select Price</div><div class="btn c-lightblue" onclick="deleteLine()">Delete<br>Line</div><div class="btn c-orange">Serial</div><div class="btn c-red">Offers</div><div class="btn c-blue">Pricing<br>Analysis</div><div class="btn c-teal">Load Stock</div><div class="btn c-maroon" onclick="openLoyaltyModal()">Loyalty</div><div class="btn c-orange">Serials From<br>Invoice</div><div class="btn c-purple">Dispense</div><div class="btn c-blue">Days Supply</div><div class="btn c-blue">Select Expiry</div><div class="btn c-brown">Items<br>Interactions</div><div class="btn c-red">P2E</div><div class="btn c-brown">Exit</div><div class="btn c-blue" onclick="setMode('SUPERVISOR')">Supervisor</div><div class="btn c-brown">Items<br>Interactions</div><div class="btn c-red">P2E</div><div class="btn c-teal" onclick="suspendAndGoMain()">Suspend</div><div class="btn c-maroon">Total</div><div class="btn c-rose" onclick="goBack()">◀ Back</div>`;
         } else if (currentMode === 'SUPERVISOR') {
             panel.innerHTML = `<div class="btn c-purple">Add Loyalty</div><div class="btn c-purple">Assign Card</div><div class="btn c-green">Promotion<br>Activation</div><div class="btn c-purple">Loyalty Follow</div><div class="btn c-purple">Check Price</div><div class="btn c-purple">My Address</div><div class="btn c-purple">Reports</div><div class="btn c-purple">DRS</div><div class="btn c-purple">Print Invoice</div><div class="btn c-grey">POS Login</div><div class="btn c-purple">Barcode Print</div><div class="btn c-yellow">Print Last<br>Invoice</div><div class="btn c-purple">Shelf Sticker</div><div class="btn c-orange">برنامج دوائك</div><div class="btn-badge-wrapper"><div class="btn c-purple" onclick="openAlternativeItems()">Alternative<br>Items</div><div class="btn-badge">NEW</div></div><div class="btn c-teal">Check Stock</div><div class="btn c-purple">Check Points</div><div class="btn c-orange">Find Invoice</div><div class="btn c-teal" onclick="suspendAndGoMain()">Suspend</div><div class="btn c-red">Notify<br>Customer</div><div class="btn c-red span-2" onclick="voidAllAndBack()">Void All</div><div class="btn c-red span-2" onclick="goBack()">◀ Back</div>`;
         }
@@ -2068,10 +2079,39 @@ infoBox.addEventListener('click', toggleInfoBox);
         document.getElementById('suggestions').style.display = 'none';
     }
 
+    // دالة جديدة لإضافة حساب الولاء كسطر في الجدول
+    function addLoyaltyToCart(phone) {
+        if (currentMode !== 'SALES') setMode('SALES');
+        cart.push({
+            isLoyalty: true,
+            phone: phone,
+            name: "Loyalty Account",
+            code: phone,
+            price: 0,
+            discountVal: 0,
+            finalTotal: 0
+        });
+        document.getElementById('searchInput').value = '';
+        document.getElementById('suggestions').style.display = 'none';
+        renderTable(); 
+        selectRow(cart.length - 1);
+    }
+
     function handleInput() {
         const val = document.getElementById('searchInput').value.toUpperCase();
         const list = document.getElementById('suggestions');
+        
+        // التحقق مما إذا كان المدخل رقم جوال
+        const isPhoneNumber = /^[0-9+]+$/.test(val) && val.length >= 9;
+
         if(!val) { showDefaultSuggestions(); return; }
+        
+        if (isPhoneNumber) {
+            // نقفل قايمة الاقتراحات عشان اليوزر يضغط Enter
+            list.style.display = 'none';
+            return;
+        }
+
         const matches = productsDB.filter(p => p.code.includes(val) || p.name.includes(val));
         list.innerHTML = '';
         if(matches.length > 0) {
@@ -2088,6 +2128,15 @@ infoBox.addEventListener('click', toggleInfoBox);
 
     function handleKey(e) { 
         if(e.key === 'Enter') { 
+            const val = document.getElementById('searchInput').value.trim();
+            const isPhoneNumber = /^[0-9+]+$/.test(val) && val.length >= 9;
+            
+            if (isPhoneNumber) {
+                // لو ضغط Enter وكان كاتب رقم جوال، ينزل السطر في الجدول
+                addLoyaltyToCart(val);
+                return;
+            }
+
             const l = document.getElementById('suggestions'); 
             if(l.style.display==='block' && l.firstChild) l.firstChild.click(); 
         } 
@@ -2118,7 +2167,14 @@ infoBox.addEventListener('click', toggleInfoBox);
             const row = document.createElement('tr');
             row.className = `table-row ${idx === selectedIndex ? 'selected' : ''}`;
             row.onclick = () => selectRow(idx);
-            row.innerHTML = `<td class="col-cell col-desc">${item.name} (${item.code})</td><td class="col-cell col-qty">1</td><td class="col-cell col-stock">--</td><td class="col-cell col-ds">...</td><td class="col-cell col-price">${formatNumber(item.price)}</td><td class="col-cell col-expiry">--</td><td class="col-cell col-disc ${item.discountVal > 0 ? 'txt-disc' : ''}">${formatNumber(item.discountVal)}</td><td class="col-cell col-vat">0.00</td><td class="col-cell col-total" style="font-weight:bold">${formatNumber(item.finalTotal)}</td>`;
+            
+            // تعديل شكل السطر لو كان خاص بالولاء
+            if (item.isLoyalty) {
+                row.innerHTML = `<td class="col-cell col-desc" style="color:var(--header-purple); font-weight:bold;">🟢 ${item.name} (${item.phone})</td><td class="col-cell col-qty">1</td><td class="col-cell col-stock">--</td><td class="col-cell col-ds">...</td><td class="col-cell col-price">0.00</td><td class="col-cell col-expiry">--</td><td class="col-cell col-disc">0.00</td><td class="col-cell col-vat">0.00</td><td class="col-cell col-total" style="font-weight:bold">0.00</td>`;
+            } else {
+                row.innerHTML = `<td class="col-cell col-desc">${item.name} (${item.code})</td><td class="col-cell col-qty">1</td><td class="col-cell col-stock">--</td><td class="col-cell col-ds">...</td><td class="col-cell col-price">${formatNumber(item.price)}</td><td class="col-cell col-expiry">--</td><td class="col-cell col-disc ${item.discountVal > 0 ? 'txt-disc' : ''}">${formatNumber(item.discountVal)}</td><td class="col-cell col-vat">0.00</td><td class="col-cell col-total" style="font-weight:bold">${formatNumber(item.finalTotal)}</td>`;
+            }
+            
             tbody.appendChild(row); 
             grossTotal += item.price;
             totalDisc += item.discountVal;
@@ -2173,8 +2229,103 @@ infoBox.addEventListener('click', toggleInfoBox);
     observer.observe(document.getElementById('sidebar'), {
         childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class']
     });
+    
+    // ========== LOYALTY MODAL FUNCTIONS ==========
+    function openLoyaltyModal() {
+        // التحقق من أن السطر المحدد في الجدول هو سطر الولاء
+        if (selectedIndex === -1 || !cart[selectedIndex]) {
+            alert('⚠️ لا يوجد رقم مسجل! يرجى كتابة رقم الجوال في خانة البحث والضغط على Enter ثم تحديده.');
+            document.getElementById('searchInput').focus();
+            return;
+        }
+
+        const selectedItem = cart[selectedIndex];
+
+        if (!selectedItem.isLoyalty || !selectedItem.phone) {
+            alert('⚠️ السطر المحدد لا يحتوي على رقم ولاء. يرجى تحديد سطر الولاء (Loyalty Account) أو كتابة رقم جديد.');
+            document.getElementById('searchInput').focus();
+            return;
+        }
+
+        const phoneValue = selectedItem.phone;
+        const loyaltyTableBody = document.getElementById('loyaltyTableBody');
+
+        // تعبئة الشاشة برقم الولاء اللي في الجدول
+        loyaltyTableBody.innerHTML = `
+            <tr class="selected-loyalty">
+                <td style="text-align: center;">▶</td>
+                <td></td>
+                <td>NEW-CUST</td>
+                <td>CUSTOMER NAME</td>
+                <td id="loyaltyMobile">${phoneValue}</td>
+            </tr>
+        `;
+
+        document.getElementById('loyaltyModal').style.display = 'block';
+    }
+
+    function closeLoyaltyModal() {
+        document.getElementById('loyaltyModal').style.display = 'none';
+    }
+
+    function sendGoogleReview() {
+        let phoneElement = document.getElementById('loyaltyMobile');
+        
+        if(!phoneElement) {
+             alert('⚠️ لا يوجد رقم جوال مسجل لإرسال الرسالة.');
+             return;
+        }
+
+        let phone = phoneElement.innerText.trim();
+        
+        if (!phone.startsWith('+')) {
+            phone = '+' + phone;
+        }
+
+        // --- بيانات حسابك في ClickSend ---
+        const username = 'meralmohamed121022@gmail.com'; 
+        const apiKey = 'F38E7116-8E2D-25EF-354B-6664E1515424'; 
+
+        const googleLink = "https://www.google.com/maps/place/%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9+%D8%A7%D9%84%D8%AF%D9%88%D8%A7%D8%A1%E2%80%AD/@25.4813588,49.5721381,17z/data=!4m14!1m5!8m4!1e1!2s109489795906532307280!3m1!1e1!3m7!1s0x3e37bdb42191030f:0x492788df8d54193e!8m2!3d25.481354!4d49.574713!9m1!1b1!16s%2Fg%2F11ktvjny7y?entry=ttu&g_ep=EgoyMDI2MDIxNy4";
+        const messageText = `يسعدنا تقييمك لفرع 66 عبر الرابط التالي:\n${googleLink}`;
+
+        document.body.style.cursor = 'wait';
+
+        // إرسال الطلب لـ ClickSend
+        fetch('https://rest.clicksend.com/v3/sms/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa(username + ':' + apiKey)
+            },
+            body: JSON.stringify({
+                messages: [
+                    {
+                        // مسحنا الـ source خالص عشان توصل برقم افتراضي وتتخطى الحظر
+                        body: messageText,
+                        to: phone
+                    }
+                ]
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.body.style.cursor = 'default';
+            
+            // التحقق من نجاح الإرسال
+            if (data.http_code === 200) {
+                alert('✅ عاش جداً! تم إرسال رسالة التقييم بنجاح، بص في موبايلك دلوقتي!');
+            } else {
+                alert('❌ فشل الإرسال: ' + data.response_msg);
+            }
+        })
+        .catch((error) => {
+            document.body.style.cursor = 'default';
+            console.error('Error:', error);
+            alert('⚠️ حدث خطأ في الاتصال بالسيرفر. تأكد من اتصال الإنترنت.');
+        });
+    }
 </script>
 
-</script>
 </body>
 </html>
